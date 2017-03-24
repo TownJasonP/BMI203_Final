@@ -37,7 +37,7 @@ y = np.load('../output/y_data.npy')
 pos_ix = [i for i in range(len(y)) if y[i] == 1]
 neg_ix = [i for i in range(len(y)) if y[i] == 0]
 
-train_ix = range(len(pos_ix))
+train_ix = range(250)
 
 train_set = [pos_ix[ix] for ix in train_ix] + [neg_ix[ix] for ix in train_ix]
 
@@ -47,7 +47,7 @@ y_train = y[train_set]
 for i in range(2):
 
     neural_net = Sequential()
-    neural_net.add(Conv1D(nb_filter = 5, filter_length = 5, input_shape = (17,4)))
+    neural_net.add(Conv1D(nb_filter = 10, filter_length = 5, input_shape = (17,4)))
     neural_net.add(Flatten())
     neural_net.add(Dense(10))
     neural_net.add(Activation('relu'))
@@ -111,3 +111,8 @@ plt.savefig('../output/repeatability.png')
 
 from scipy.stats import pearsonr
 print('Pearson correlation: ' + str(pearsonr(run1[1], run2[1])[0]))
+
+output = open('../output/tab_sep_predictions.txt', 'w')
+for i in range(len(sequences)):
+    output.write(str(sequences[i]) + '\t' + str(predictions[i][0]) + '\t')
+output.close()
