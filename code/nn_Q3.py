@@ -81,6 +81,36 @@ neural_net.fit(x = x_train, y = y_train, batch_size = 32, nb_epoch = 250)
 train_performance = np.ndarray.flatten(neural_net.predict(x_train))
 test_performance = np.ndarray.flatten(neural_net.predict(x_test))
 
+# generate histograms of the training and testing data
+plt.figure(figsize = (6,6), facecolor = 'white')
+
+plt.subplot(211)
+plt.title('Neural Net Performance on Training Data')
+train_positives = [train_performance[i] for i in range(len(y_train)) if y_train[i] == 1]
+train_negatives = [train_performance[i] for i in range(len(y_train)) if y_train[i] == 0]
+bins = np.linspace(0,1,21)
+plt.hist(train_positives, alpha = 0.5, label = 'Binding Sites', bins = bins)
+plt.hist(train_negatives, alpha = 0.5, label = 'Nonbinding Sites', bins = bins)
+plt.ylim(0,100)
+plt.ylabel('Frequency')
+plt.xlabel('Predicted Probability of\nBeing a True Binding Site')
+plt.legend(bbox_to_anchor = (1.6, 1))
+
+plt.subplot(212)
+plt.title('Neural Net Performance on Testing Data')
+test_positives = [test_performance[i] for i in range(len(y_test)) if y_test[i] == 1]
+test_negatives = [test_performance[i] for i in range(len(y_test)) if y_test[i] == 0]
+bins = np.linspace(0,1,21)
+plt.hist(test_positives, alpha = 0.5, label = 'Binding Sites', bins = bins)
+plt.hist(test_negatives, alpha = 0.5, label = 'Nonbinding Sites', bins = bins)
+plt.ylim(0,100)
+plt.ylabel('Frequency')
+plt.xlabel('Predicted Probability of\nBeing a True Binding Site')
+plt.legend(bbox_to_anchor = (1.6, 1))
+
+plt.tight_layout()
+plt.savefig('../output/training_testing_hists.png', bbox_inches = 'tight')
+
 # generate ROC curves for training and testing data
 def roc(target, data):
     thresholds = np.linspace(0,1,1000)
