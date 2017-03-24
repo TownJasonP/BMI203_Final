@@ -20,6 +20,7 @@ from keras.models import Sequential
 from keras.layers import Dense, Activation, Flatten
 from keras.layers.convolutional import Conv1D
 from keras.utils.np_utils import to_categorical
+from keras import backend as K
 
 # generate ROC curves for training and testing data
 def roc(target, data):
@@ -77,10 +78,13 @@ for test in range(100):
 	neural_net.add(Dense(1))
 	neural_net.add(Activation('sigmoid'))
 	neural_net.compile(loss='mse', optimizer='sgd')
-	neural_net.fit(x = x_train, y = y_train, batch_size = 32, nb_epoch = 250)
+	print('Iteration ' + str(test) ' of 100')
+	neural_net.fit(x = x_train, y = y_train, batch_size = 32, nb_epoch = 250, verbose = 0)
 
 	train_performance = np.ndarray.flatten(neural_net.predict(x_train))
 	test_performance = np.ndarray.flatten(neural_net.predict(x_test))
+
+	K.clear_session()
 
 	x1,y1 = roc(y_train, train_performance)
 	a1 = auroc(x1,y1)
